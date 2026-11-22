@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Image to STL Converter</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="assets/site.css">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+<script type="module" src="assets/js/app.js"></script>
+</head>
+<body>
+<main id="main">
+<section class="hero"><div class="wrap"><h1>Image to STL Converter</h1><p class="lede">Turn a JPG, PNG or WebP into a printable heightmap relief or a flat lithophane STL, sized in millimeters. The page reads the picture with the browser's canvas, builds a closed mesh in JavaScript and saves the STL to your downloads, so nothing is uploaded. Pick a mode, set the width and thickness, check the 3D preview and download.</p><div class="tool" id="tool" data-mode="relief">
+<form class="panel" aria-label="Converter settings" onsubmit="return false">
+<label class="drop" id="drop"><input type="file" id="f-file" accept="image/png,image/jpeg,image/webp"><strong>Choose an image or drop it here</strong><span>JPG, PNG or WebP. You can also paste from the clipboard.</span></label>
+<p class="src"><span id="src-name">Loading the sample picture…</span> <button type="button" class="linkbtn" id="sample">Use sample</button></p>
+<div class="seg" role="radiogroup" aria-label="Output type">
+<button type="button" role="radio" data-mode="relief" aria-checked="true">Heightmap relief</button>
+<button type="button" role="radio" data-mode="litho" aria-checked="false">Lithophane</button>
+</div>
+<div class="ctl">
+<div class="row"><label for="f-width">Width</label><output for="f-width"></output><input type="range" id="f-width" min="20" max="250" step="1" value="100" data-unit=" mm"></div>
+<div class="only-relief">
+<div class="row"><label for="f-base">Base thickness</label><output for="f-base"></output><input type="range" id="f-base" min="0.4" max="5" step="0.1" value="1" data-unit=" mm"></div>
+<div class="row"><label for="f-relief">Max relief height</label><output for="f-relief"></output><input type="range" id="f-relief" min="0.4" max="15" step="0.1" value="3" data-unit=" mm"></div>
+</div>
+<div class="only-litho">
+<div class="row"><label for="f-min">Min thickness (bright areas)</label><output for="f-min"></output><input type="range" id="f-min" min="0.4" max="2" step="0.1" value="0.8" data-unit=" mm"></div>
+<div class="row"><label for="f-max">Max thickness (dark areas)</label><output for="f-max"></output><input type="range" id="f-max" min="1.5" max="6" step="0.1" value="3" data-unit=" mm"></div>
+<label class="check"><input type="checkbox" id="f-frame-on" checked><span>Border frame<small>A solid rim at full thickness stiffens the panel.</small></span></label>
+<div class="row"><label for="f-frame">Frame width</label><output for="f-frame"></output><input type="range" id="f-frame" min="1" max="12" step="0.5" value="4" data-unit=" mm"></div>
+</div>
+<div class="row"><label for="f-res">Resolution (samples across)</label><output for="f-res"></output><input type="range" id="f-res" min="50" max="600" step="10" value="200"></div>
+<div class="row"><label for="f-smooth">Smoothing passes</label><output for="f-smooth"></output><input type="range" id="f-smooth" min="0" max="5" step="1" value="1"></div>
+<label class="check"><input type="checkbox" id="f-invert"><span>Invert<small id="invert-hint">Off: bright areas are raised.</small></span></label>
+</div>
+<button type="button" class="dl" id="dl" disabled>Download STL</button>
+</form>
+<div class="stage">
+<div class="view" id="view" aria-label="3D preview of the STL, drag to rotate">Building the 3D preview…</div>
+<dl class="stats">
+<div><dt>Size (X × Y × Z)</dt><dd id="o-dims">–</dd></div>
+<div><dt>Triangles</dt><dd id="o-tris">–</dd></div>
+<div><dt>STL file size</dt><dd id="o-size">–</dd></div>
+<div><dt>Grid (spacing)</dt><dd id="o-grid">–</dd></div>
+</dl>
+<div class="sub">
+<figure class="mapbox"><canvas id="map" width="200" height="140" aria-label="Height map of the processed image"></canvas><figcaption id="map-label">Height map</figcaption></figure>
+<div>
+<p class="msg" id="o-msg" role="status" aria-live="polite">Loading…</p>
+<p class="local"><b>Runs 100% in your browser.</b> Your image is read and converted on this device and the STL is saved straight to your downloads. Nothing is uploaded to any server. Built in <span id="o-time">–</span>.</p>
+<p class="fmpath"><b>Relief, not a full object.</b> This tool makes a 2.5D panel whose height follows the picture's brightness. For a complete 3D model of a chair, lamp or other single object from a photo, use FurniMesh's <a href="https://furnimesh.com/image-to-3d?utm_source=github-image-to-stl-converter&amp;utm_medium=referral&amp;utm_campaign=best-network">image to 3D generator</a> (made by the same team).</p>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</main>
+<footer style="max-width:1100px;margin:32px auto 24px;padding:0 16px;font-size:14px;opacity:.8">
+<p>Live version: <a href="https://freeimagetostl.com/">https://freeimagetostl.com/</a> &middot; Made by the FurniMesh team (furnimesh.com)</p>
+</footer>
+</body>
+</html>
